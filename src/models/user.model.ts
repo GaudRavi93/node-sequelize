@@ -2,7 +2,7 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 
 
 export interface UserInterface {
-    id?: string;
+    id?: number;
     phone: string;
     email: string;
     password: string;
