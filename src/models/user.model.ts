@@ -1,3 +1,4 @@
+// import { Category } from "./category.model";
 import { DataTypes, Model, Sequelize } from "sequelize";
 
 
@@ -43,5 +44,9 @@ export class User extends Model {
                 freezeTableName: true,
             }
         )
+    }
+
+    static initAssociations(){
+        // User.hasMany(Category, {foreignKey: "user_id", as: "categories"})
     }
 }
