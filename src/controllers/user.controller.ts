@@ -19,8 +19,12 @@ export class UserController extends HttpStatus {
             if(existingUser) return httpStatus.badRequestResponse(res, "Email address already exist.")
 
             const result = await User.create(requestBody);
+            
             if(result){
-                return httpStatus.recordCreatedResponse(res, "User created successfully.",result)
+                // Create a copy of the user object without the password field
+                const userWithoutPassword = { ...result.toJSON() };
+                delete userWithoutPassword.password;
+                return httpStatus.recordCreatedResponse(res, "User created successfully.",userWithoutPassword)
             }else{
                 return httpStatus.badRequestResponse(res, "Unable to create user.")
             }
@@ -42,13 +46,16 @@ export class UserController extends HttpStatus {
                 return httpStatus.badRequestResponse(res, "Invalid email or password.");
             }
             
-            const isValidPassword = await comparePassword(password, user.password)
+            const isValidPassword = await comparePassword(password, user.password);
             if(!isValidPassword){
                 return httpStatus.badRequestResponse(res, "Invalid email or password.");
             }
 
+            // Create a copy of the user object without the password field
             const token = generateToken(user);
-            return httpStatus.successResponse(res, "Login successfully.", {user, token});
+            const userWithoutPassword = { ...user.toJSON(), token };
+            delete userWithoutPassword.password;
+            return httpStatus.successResponse(res, "Login successfully.",  userWithoutPassword);
 
         }catch(error: any){
             return httpStatus.badRequestResponse(res, error.message);
