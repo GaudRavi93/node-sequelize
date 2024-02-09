@@ -1,6 +1,7 @@
 import { User } from "../models/user.model";
 import { decodeToken } from "../utils/helper";
 import { HttpStatus } from "../utils/httpStatus";
+import { Product } from "../models/product.model";
 import { Category } from "../models/category.model";
 import { NextFunction, Request, Response } from "express";
 
@@ -38,6 +39,11 @@ export class CategoryController extends HttpStatus {
                             model: User,
                             as: "user_details",
                             attributes: ["id", "firstName", "lastName", "email", "phone"]
+                        },
+                        {
+                            model: Product,
+                            as: "products",
+                            attributes: ["id", "name", "quantity", "price", "actualCost", "image"]
                         }
                     ]
                 }
